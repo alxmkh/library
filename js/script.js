@@ -1,303 +1,265 @@
 document.addEventListener("DOMContentLoaded", function () {
     'use strict';
-    let myLibrary = [];
-    let storageLibrary = [];
 
-    const addBtn = document.querySelector('#addBtn');
-    const createBtn = document.querySelector('#createBtn');
-    const delCard = document.querySelector('.card-columns');
+    class Library {
 
-    const cardDeck = document.querySelector(".card-columns");
-    const modalTitle = document.querySelector('#inputTitle');
-    const modalAuthor = document.querySelector('#inputAuthor');
-    const modalPages = document.querySelector('#inputPages');
-    const modalIsRead = document.querySelector('#isRead');
-
-    function createBookObj(idValue, titleValue, authorValue, pagesValue, isReadValue) {
-        return {
-            id: idValue,
-            title: titleValue,
-            author: authorValue,
-            pages: pagesValue,
-            isRead: isReadValue
-        };
-    }
-    // So badly ... 
-    function renderHtmlFromLocalStorage(p_id, p_title, p_author, p_pages, p_read) {
-        const mainCard = document.createElement('div');
-        const cardBody = document.createElement('div');
-        const cardContext = document.createElement('div');
-        const closeCard = document.createElement('div');
-        const faClose = document.createElement('i');
-        // Create title.
-        const divTitle = document.createElement('div');
-        const titleLabel = document.createElement('label');
-        const title = document.createElement('label');
-        // Create author.
-        const divAuthor = document.createElement('div');
-        const authorLabel = document.createElement('label');
-        const author = document.createElement('label');
-        // Create pages.
-        const divPages = document.createElement('div');
-        const pagesLabel = document.createElement('label');
-        const pages = document.createElement('label');
-        // Create isRead.
-        const divRead = document.createElement('div');
-        const readLabel = document.createElement('label');
-        //const isRead = document.createElement('label');
-        const isRead = document.createElement('input');
-
-        // Set text to title.
-        titleLabel.textContent = 'Title:\xa0';
-        title.textContent = p_title;
-        // Set text to author.
-        authorLabel.textContent = 'Author:\xa0';
-        author.textContent = p_author;
-        // Set text to pages.
-        pagesLabel.textContent = 'Pages:\xa0';
-        pages.textContent = p_pages;
-        // Set text to isRead.
-        readLabel.textContent = 'Is read?:\xa0';
-        isRead.checked = Boolean(p_read);
-
-        mainCard.setAttribute('class', 'card');
-        mainCard.setAttribute('id', p_id);
-        cardBody.setAttribute('class', 'card-body');
-        cardContext.setAttribute('class', 'card-text');
-        closeCard.setAttribute('class', 'row justify-content-md-end m-0');
-        faClose.setAttribute('class', 'fa fa-times close');
-        // Add CSS to title.
-        divTitle.setAttribute('class', 'row justify-content-md-start');
-        // Add CSS to author.
-        divAuthor.setAttribute('class', 'row justify-content-md-start');
-        // Add CSS to pages.
-        divPages.setAttribute('class', 'row justify-content-md-start');
-        // Add CSS to read.
-        divRead.setAttribute('class', 'row justify-content-md-start');
-        isRead.setAttribute('type', 'checkbox');
-        isRead.setAttribute('class', 'form-check-input-right check');
-        isRead.setAttribute('style', 'margin-top: 7px');
-
-        closeCard.appendChild(faClose);
-        cardDeck.appendChild(mainCard);
-        mainCard.appendChild(cardBody);
-        cardBody.appendChild(cardContext);
-        cardContext.appendChild(closeCard);
-        // Title render.
-        cardContext.appendChild(divTitle);
-        divTitle.appendChild(titleLabel);
-        divTitle.appendChild(title);
-        // Author render.
-        cardContext.appendChild(divAuthor);
-        divAuthor.appendChild(authorLabel);
-        divAuthor.appendChild(author);
-        // Pages render.
-        cardContext.appendChild(divPages);
-        divPages.appendChild(pagesLabel);
-        divPages.appendChild(pages);
-        // Read render.
-        cardContext.appendChild(divRead);
-        divRead.appendChild(readLabel);
-        divRead.appendChild(isRead);
-    }
-
-    function Book() {
-        // Create card area.
-        const mainCard = document.createElement('div');
-        const cardBody = document.createElement('div');
-        const cardContext = document.createElement('div');
-        const closeCard = document.createElement('div');
-        const faClose = document.createElement('i');
-        // Create title.
-        const divTitle = document.createElement('div');
-        const titleLabel = document.createElement('label');
-        const title = document.createElement('label');
-        // Create author.
-        const divAuthor = document.createElement('div');
-        const authorLabel = document.createElement('label');
-        const author = document.createElement('label');
-        // Create pages.
-        const divPages = document.createElement('div');
-        const pagesLabel = document.createElement('label');
-        const pages = document.createElement('label');
-        // Create isRead.
-        const divRead = document.createElement('div');
-        const readLabel = document.createElement('label');
-        //const isRead = document.createElement('label');
-        const isRead = document.createElement('input');
-
-        // Set text to title.
-        titleLabel.textContent = 'Title:\xa0';
-        title.textContent = modalTitle.value;
-        // Set text to author.
-        authorLabel.textContent = 'Author:\xa0';
-        author.textContent = modalAuthor.value;
-        // Set text to pages.
-        pagesLabel.textContent = 'Pages:\xa0';
-        pages.textContent = modalPages.value;
-        // Set text to isRead.
-        readLabel.textContent = 'Is read?:\xa0';
-        isRead.checked = modalIsRead.checked;
-
-        mainCard.setAttribute('class', 'card');
-        mainCard.setAttribute('id', modalTitle.value + modalAuthor.value);
-        cardBody.setAttribute('class', 'card-body');
-        cardContext.setAttribute('class', 'card-text');
-        closeCard.setAttribute('class', 'row justify-content-md-end m-0');
-        faClose.setAttribute('class', 'fa fa-times close');
-        // Add CSS to title.
-        divTitle.setAttribute('class', 'row justify-content-md-start');
-        // Add CSS to author.
-        divAuthor.setAttribute('class', 'row justify-content-md-start');
-        // Add CSS to pages.
-        divPages.setAttribute('class', 'row justify-content-md-start');
-        // Add CSS to read.
-        divRead.setAttribute('class', 'row justify-content-md-start');
-        isRead.setAttribute('type', 'checkbox');
-        isRead.setAttribute('class', 'form-check-input-right check');
-        isRead.setAttribute('style', 'margin-top: 7px');
-
-        closeCard.appendChild(faClose);
-        cardDeck.appendChild(mainCard);
-        mainCard.appendChild(cardBody);
-        cardBody.appendChild(cardContext);
-        cardContext.appendChild(closeCard);
-        // Title render.
-        cardContext.appendChild(divTitle);
-        divTitle.appendChild(titleLabel);
-        divTitle.appendChild(title);
-        // Author render.
-        cardContext.appendChild(divAuthor);
-        divAuthor.appendChild(authorLabel);
-        divAuthor.appendChild(author);
-        // Pages render.
-        cardContext.appendChild(divPages);
-        divPages.appendChild(pagesLabel);
-        divPages.appendChild(pages);
-        // Read render.
-        cardContext.appendChild(divRead);
-        divRead.appendChild(readLabel);
-        divRead.appendChild(isRead);
-    }
-
-    function clearModalWindow() {
-        modalTitle.value = '';
-        modalAuthor.value = '';
-        modalPages.value = '';
-        modalIsRead.checked = false;
-    }
-
-    function addBookToLibrary(obj) {
-        const tmp = myLibrary.filter(item => {
-            return item.id == obj.id;
-        });
-        if (tmp.length == 0) {
-            myLibrary.push(obj);
-            new Book();
-            clearModalWindow();
-        } else {
-            alert('Book already exists in library.');
+        constructor() {
+            this.myLibrary = [];
+            this.storageLibrary = [];
+            this.addBtn = document.querySelector('#addBtn');
+            this.createBtn = document.querySelector('#createBtn');
+            this.delCard = document.querySelector('.card-columns');
         }
-    }
 
-    function deleteBookFromLibrary(id) {
-        let tmpObj;
-        for (let i = 0; i < myLibrary.length; i++) {
-            if (myLibrary[i].id == id) {
-                tmpObj = myLibrary[i];
-                break;
+        createCardHtmlContext() {
+            this.cardDeck = document.querySelector(".card-columns");
+            this.modalTitle = document.querySelector('#inputTitle');
+            this.modalAuthor = document.querySelector('#inputAuthor');
+            this.modalPages = document.querySelector('#inputPages');
+            this.modalIsRead = document.querySelector('#isRead');
+
+            this.mainCard = document.createElement('div');
+            this.cardBody = document.createElement('div');
+            this.cardContext = document.createElement('div');
+            this.closeCard = document.createElement('div');
+            this.faClose = document.createElement('i');
+            // Create title.
+            this.divTitle = document.createElement('div');
+            this.titleLabel = document.createElement('label');
+            this.title = document.createElement('label');
+            // Create author.
+            this.divAuthor = document.createElement('div');
+            this.authorLabel = document.createElement('label');
+            this.author = document.createElement('label');
+            // Create pages.
+            this.divPages = document.createElement('div');
+            this.pagesLabel = document.createElement('label');
+            this.pages = document.createElement('label');
+            // Create isRead.
+            this.divRead = document.createElement('div');
+            this.readLabel = document.createElement('label');
+            //const isRead = document.createElement('label');
+            this.isRead = document.createElement('input');
+        }
+
+        createBook(pId = this.modalTitle.value + this.modalAuthor.value,
+            pTitle = this.modalTitle.value, pAuthor = this.modalAuthor.value,
+            pPages = this.modalPages.value, pIsRead = this.modalIsRead.checked) {
+
+            // Set text to title.
+            this.titleLabel.textContent = 'Title:\xa0';
+            this.title.textContent = pTitle;
+            // Set text to author.
+            this.authorLabel.textContent = 'Author:\xa0';
+            this.author.textContent = pAuthor;
+            // Set text to pages.
+            this.pagesLabel.textContent = 'Pages:\xa0';
+            this.pages.textContent = pPages;
+            // Set text to isRead.
+            this.readLabel.textContent = 'Is read?:\xa0';
+            this.isRead.checked = Boolean(pIsRead);
+
+            this.mainCard.setAttribute('class', 'card');
+            this.mainCard.setAttribute('id', pId);
+            this.cardBody.setAttribute('class', 'card-body');
+            this.cardContext.setAttribute('class', 'card-text');
+            this.closeCard.setAttribute('class', 'row justify-content-md-end m-0');
+            this.faClose.setAttribute('class', 'fa fa-times close');
+            // Add CSS to title.
+            this.divTitle.setAttribute('class', 'row justify-content-md-start');
+            // Add CSS to author.
+            this.divAuthor.setAttribute('class', 'row justify-content-md-start');
+            // Add CSS to pages.
+            this.divPages.setAttribute('class', 'row justify-content-md-start');
+            // Add CSS to read.
+            this.divRead.setAttribute('class', 'row justify-content-md-start');
+            this.isRead.setAttribute('type', 'checkbox');
+            this.isRead.setAttribute('class', 'form-check-input-right check');
+            this.isRead.setAttribute('style', 'margin-top: 7px');
+
+            this.closeCard.appendChild(this.faClose);
+            this.cardDeck.appendChild(this.mainCard);
+            this.mainCard.appendChild(this.cardBody);
+            this.cardBody.appendChild(this.cardContext);
+            this.cardContext.appendChild(this.closeCard);
+            // Title render.
+            this.cardContext.appendChild(this.divTitle);
+            this.divTitle.appendChild(this.titleLabel);
+            this.divTitle.appendChild(this.title);
+            // Author render.
+            this.cardContext.appendChild(this.divAuthor);
+            this.divAuthor.appendChild(this.authorLabel);
+            this.divAuthor.appendChild(this.author);
+            // Pages render.
+            this.cardContext.appendChild(this.divPages);
+            this.divPages.appendChild(this.pagesLabel);
+            this.divPages.appendChild(this.pages);
+            // Read render.
+            this.cardContext.appendChild(this.divRead);
+            this.divRead.appendChild(this.readLabel);
+            this.divRead.appendChild(this.isRead);
+        }
+
+        createBookObj(idValue, titleValue, authorValue, pagesValue, isReadValue) {
+            return {
+                id: idValue,
+                title: titleValue,
+                author: authorValue,
+                pages: pagesValue,
+                isRead: isReadValue
+            };
+        }
+
+        clearModalWindow() {
+            this.modalTitle.value = '';
+            this.modalAuthor.value = '';
+            this.modalPages.value = '';
+            this.modalIsRead.checked = false;
+        }
+
+        addBookToLibrary(obj) {
+            const tmp = this.myLibrary.filter(item => {
+                return item.id == obj.id;
+            });
+            if (tmp.length == 0) {
+                this.myLibrary.push(obj);
+
+                this.createBook();
+                this.clearModalWindow();
+            } else {
+                alert('Book already exists in library.');
             }
         }
 
-        myLibrary.splice(myLibrary.indexOf(tmpObj), 1);
-        localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
-    }
-
-    function changeIsRead(checkBox) {
-        let id = checkBox.parentNode.parentNode.parentNode.parentNode.id;
-
-        if (checkBox.checked) {
-            for (let i = 0; i < myLibrary.length; i++) {
-                if (myLibrary[i].id == id) {
-                    myLibrary[i].isRead = true;
+        deleteBookFromLibrary(id) {
+            let tmpObj;
+            for (let i = 0; i < this.myLibrary.length; i++) {
+                if (this.myLibrary[i].id == id) {
+                    tmpObj = this.myLibrary[i];
+                    break;
                 }
             }
-        } else {
-            for (let i = 0; i < myLibrary.length; i++) {
-                if (myLibrary[i].id == id) {
-                    myLibrary[i].isRead = false;
+
+            this.myLibrary.splice(this.myLibrary.indexOf(tmpObj), 1);
+            localStorage.setItem('myLibrary', JSON.stringify(this.myLibrary));
+            console.log(this.myLibrary);
+        }
+
+        changeIsRead(checkBox) {
+            let id = checkBox.parentNode.parentNode.parentNode.parentNode.id;
+
+            if (checkBox.checked) {
+                for (let i = 0; i < this.myLibrary.length; i++) {
+                    if (this.myLibrary[i].id == id) {
+                        this.myLibrary[i].isRead = true;
+                        localStorage.setItem('myLibrary', JSON.stringify(this.myLibrary));
+                    }
+                }
+            } else {
+                for (let i = 0; i < this.myLibrary.length; i++) {
+                    if (this.myLibrary[i].id == id) {
+                        this.myLibrary[i].isRead = false;
+                        localStorage.setItem('myLibrary', JSON.stringify(this.myLibrary));
+                    }
                 }
             }
         }
+
+        loadFromLocalStorage() {
+            if (localStorage.getItem('myLibrary')) {
+                let tmyLibrary = JSON.parse(localStorage.getItem('myLibrary'));
+                console.log(tmyLibrary);
+                tmyLibrary.map(book => {
+                    this.createCardHtmlContext();
+                    this.createBook(book.id, book.title, book.author, book.pages, book.isRead)
+                });
+                this.myLibrary = tmyLibrary;
+            }
+        }
+
+        validTitle() {
+            if (this.modalTitle.value == "") {
+                document.querySelector('#titleValidator').style.display = 'block';
+                document.querySelector('#titleValidator').textContent = "Please input title!";
+                return false;
+            } else {
+                document.querySelector('#titleValidator').style.display = 'none';
+                return true;
+            }
+        }
+
+        validAuthor() {
+            if (this.modalAuthor.value == "") {
+                document.querySelector('#authorValidator').style.display = 'block';
+                const validAuthorDiv = document.querySelector('#authorValidator').textContent = "Please input author!";
+
+                return false;
+            } else {
+                document.querySelector('#authorValidator').style.display = 'none';
+                return true;
+            }
+        }
+
+        pagesValidator() {
+            if (isNaN(this.modalPages.value) || this.modalPages.value < 0 || this.modalPages.value == "") {
+                document.querySelector('#pagesValidator').style.display = 'block';
+                document.querySelector('#pagesValidator').textContent = "Please input only number > 0!";
+                return false;
+            } else {
+                document.querySelector('#pagesValidator').style.display = 'none';
+                return true;
+            }
+        }
+
+        showModal() {
+            this.addBtn.addEventListener('click', function () {
+                $('#addBookForm').modal('show');
+            });
+        }
+
+        addBookWrapper(e) {
+            console.log(this);
+            this.createCardHtmlContext();
+
+            if (this.validTitle() && this.validAuthor() && this.pagesValidator()) {
+                $('#addBookForm').modal('hide');
+                console.log(this);
+                this.addBookToLibrary(this.createBookObj(this.modalTitle.value + this.modalAuthor.value,
+                    this.modalTitle.value, this.modalAuthor.value, this.modalPages.value, this.modalIsRead.checked));
+                console.log(this.myLibrary);
+                localStorage.setItem('myLibrary', JSON.stringify(this.myLibrary));
+            }
+        }
+
+        deleteBookWrapper(e) {
+            if (e.target.classList.contains("close")) {
+                localStorage.setItem('myLibrary', JSON.stringify(this.myLibrary));
+                let id = e.target.parentNode.parentNode.parentNode.parentNode.id;
+                this.deleteBookFromLibrary(id);
+                let close = e.target.parentNode.parentNode.parentNode.parentNode;
+                close.remove();
+            }
+
+            if (e.target.classList.contains('check')) {
+                let checkBox = e.target;
+                this.changeIsRead(checkBox);
+            }
+        }
+
+        addBook() {
+            this.createBtn.addEventListener('click', (e) => this.addBookWrapper(e));
+        }
+
+        deleteBook() {
+            this.delCard.addEventListener('click', (e) => this.deleteBookWrapper(e));
+        }
+
     }
 
-    function validTitle() {
-        if (modalTitle.value == "") {
-            document.querySelector('#titleValidator').style.display = 'block';
-            document.querySelector('#titleValidator').textContent = "Please input title!";
-            return false;
-        } else {
-            document.querySelector('#titleValidator').style.display = 'none';
-            return true;
-        }
-    }
-
-    function validAuthor() {
-        if (modalAuthor.value == "") {
-            document.querySelector('#authorValidator').style.display = 'block';
-            const validAuthorDiv = document.querySelector('#authorValidator').textContent = "Please input author!";
-
-            return false;
-        } else {
-            document.querySelector('#authorValidator').style.display = 'none';
-            return true;
-        }
-    }
-
-    function pagesValidator() {
-        if (isNaN(modalPages.value) || modalPages.value < 0 || modalPages.value == "") {
-            document.querySelector('#pagesValidator').style.display = 'block';
-            document.querySelector('#pagesValidator').textContent = "Please input only number > 0!";
-            return false;
-        } else {
-            document.querySelector('#pagesValidator').style.display = 'none';
-            return true;
-        }
-    }
-
-    addBtn.addEventListener('click', function () {
-        $('#addBookForm').modal('show');
-    });
-
-    createBtn.addEventListener('click', function (e) {
-        if (validTitle() && validAuthor() && pagesValidator()) {
-            $('#addBookForm').modal('hide');
-            addBookToLibrary(createBookObj(modalTitle.value + modalAuthor.value,
-                modalTitle.value, modalAuthor.value, modalPages.value, modalIsRead.checked));
-            console.log(myLibrary);
-            localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
-        }
-    });
-
-    delCard.addEventListener('click', function (e) {
-        if (e.target.classList.contains("close")) {
-            localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
-            let id = e.target.parentNode.parentNode.parentNode.parentNode.id;
-            deleteBookFromLibrary(id);
-            let close = e.target.parentNode.parentNode.parentNode.parentNode;
-            close.remove();
-        }
-        if (e.target.classList.contains('check')) {
-            let checkBox = e.target;
-            changeIsRead(checkBox);
-        }
-    });
-
-    if (localStorage.getItem('myLibrary')) {
-        let tmyLibrary = JSON.parse(localStorage.getItem('myLibrary'));
-        console.log(tmyLibrary);
-        tmyLibrary.map(book => renderHtmlFromLocalStorage(book.id, book.title, book.author, book.pages, book.isRead));
-        myLibrary = tmyLibrary;
-    }
+    const library = new Library();
+    library.loadFromLocalStorage();
+    library.showModal();
+    library.addBook();
+    library.deleteBook();
 
 });
